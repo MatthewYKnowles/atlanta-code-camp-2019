@@ -4,5 +4,5 @@ describe('Atlanta Code Camp Website Tests', ()=> {
         cy.get('.navbar-collapse > :nth-child(2) > :nth-child(6) > a').click();
         cy.contains('Matthew Knowles').click({force: true});
         cy.get('.panel-body > .dl-horizontal > :nth-child(6) > a').contains(109)
-    })
+    });
 });
