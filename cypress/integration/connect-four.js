@@ -1,17 +1,25 @@
-describe('Atlanta Code Camp Website Tests', ()=> {
-    it('should show Matthew Knowles presenting in room 109', ()=> {
+describe('Connect Four', ()=> {
+    it('should display column full when trying to add a piece to a full column', ()=> {
         cy.visit('localhost:4200');
-        cy.contains('Connect Four').click();
-        let nameOne = 'Player One-' + Date.now();
-        cy.get('#playerOne').type(nameOne);
-        let nameTwo = 'Player Two-' + Date.now();
-        cy.get('#playerTwo').type(nameTwo);
-        cy.get('.col-lg-4 > button').click();
+        cy.get('.btn > :nth-child(2)').click();
+        let nameOne = 'P1-' + Date.now();
+        cy.get(':nth-child(1) > .form-control').type(nameOne);
+        let nameTwo = 'P2-' + Date.now();
+        cy.get(':nth-child(2) > .form-control').type(nameTwo);
+        cy.get('form.ng-dirty > .btn').click();
         cy.get('canvas').then((canvas) => {
             console.log(canvas);
             const columnWidth = canvas.width() / 7;
             cy.get("canvas").click(columnWidth * 1 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10)
+            cy.get("canvas").click(columnWidth * 5 / 2, 10);
+            cy.get("canvas").click(columnWidth * 5 / 2, 10);
+            cy.get("canvas").click(columnWidth * 5 / 2, 10);
+            cy.get("canvas").click(columnWidth * 5 / 2, 10);
+            cy.get("canvas").click(columnWidth * 5 / 2, 10);
+            cy.get("canvas").click(columnWidth * 5 / 2, 10);
+            cy.contains("Column is full").should('not.be.visible');
+            cy.get("canvas").click(columnWidth * 5 / 2, 10);
+            cy.contains("Column is full").should('be.visible')
         });
     })
 });
