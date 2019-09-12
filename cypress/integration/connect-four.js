@@ -1,79 +1,86 @@
-describe('Connect Four', ()=> {
-    it('should display column full when trying to add a piece to a full column', ()=> {
-        cy.visit('http://matthewyknowles.com');
-        cy.get('.btn > :nth-child(2)').click();
-        let nameOne = 'P1-' + Date.now();
-        cy.get(':nth-child(1) > .form-control').type(nameOne);
-        let nameTwo = 'P2-' + Date.now();
-        cy.get(':nth-child(2) > .form-control').type(nameTwo);
-        cy.get('form.ng-dirty > .btn').click();
-        cy.get('canvas').then((canvas) => {
-            console.log(canvas);
-            const columnWidth = canvas.width() / 7;
-            cy.get("canvas").click(columnWidth * 1 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.contains("Column is full").should('not.be.visible');
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.contains("Column is full").should('be.visible')
-        });
-    });
-    it('should match snapshot', ()=> {
-        cy.viewport('macbook-15');
-        cy.visit('localhost:4200');
-        cy.get('.btn > :nth-child(2)').click();
-        let nameOne = 'P1-' + Date.now();
-        cy.get(':nth-child(1) > .form-control').type(nameOne);
-        let nameTwo = 'P2-' + Date.now();
-        cy.get(':nth-child(2) > .form-control').type(nameTwo);
-        cy.get('form.ng-dirty > .btn').click();
-        cy.get('canvas').then((canvas) => {
-            console.log(canvas);
-            const columnWidth = canvas.width() / 7;
-            cy.get("canvas").click(columnWidth * 1 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.get("canvas").click(columnWidth * 5 / 2, 10);
-            cy.get("canvas").matchImageSnapshot();
-        });
-    });
-    it('should verify match history', ()=> {
-        cy.visit('localhost:4200');
-        cy.get('.btn > :nth-child(2)').click();
+import {NavbarPage} from "../support/pages/navbar.page";
+
+describe("Connect Four", ()=> {
+    let playerOneName;
+    let playerTwoName;
+    let navbarPage;
+
+    beforeEach(()=> {
+        navbarPage = new NavbarPage();
         let now = Date.now();
-        let nameOne = `p1-${now}`;
-        cy.get(':nth-child(1) > .form-control').type(nameOne);
-        let nameTwo = `p2-${now}`;
-        cy.get(':nth-child(2) > .form-control').type(nameTwo);
-        cy.get('form.ng-dirty > .btn').click();
-        cy.get('canvas').then((canvas) => {
-            const columnWidth = canvas.width() / 7;
-            cy.get("canvas").click(columnWidth * 2 / 2, 10);
-            cy.get("canvas").click(columnWidth * 3 / 2, 10);
-            cy.get("canvas").click(columnWidth * 2 / 2, 10);
-            cy.get("canvas").click(columnWidth * 3 / 2, 10);
-            cy.get("canvas").click(columnWidth * 2 / 2, 10);
-            cy.get("canvas").click(columnWidth * 3 / 2, 10);
-            cy.get("canvas").click(columnWidth * 2 / 2, 10);
-        });
-        cy.contains(`${nameOne} vs ${nameTwo}: 1-0-0`);
-        cy.get('.container > .btn').click();
-        cy.get('canvas').then((canvas) => {
-            const columnWidth = canvas.width() / 7;
-            cy.get("canvas").click(columnWidth * 6 / 2, 10);
-            cy.get("canvas").click(columnWidth * 2 / 2, 10);
-            cy.get("canvas").click(columnWidth * 3 / 2, 10);
-            cy.get("canvas").click(columnWidth * 2 / 2, 10);
-            cy.get("canvas").click(columnWidth * 3 / 2, 10);
-            cy.get("canvas").click(columnWidth * 2 / 2, 10);
-            cy.get("canvas").click(columnWidth * 3 / 2, 10);
-            cy.get("canvas").click(columnWidth * 2 / 2, 10);
-        });
-        cy.contains(`${nameOne} vs ${nameTwo}: 1-1-0`);
-    })
+        playerOneName = `p1-${now}`;
+        playerTwoName = `p2-${now}`;
+        cy.visit("localhost:4200");
+    });
+
+    it('should display winning players name', ()=> {
+        let playerSelectionPage = navbarPage.goToConnectFour();
+        playerSelectionPage.setPlayerOne(playerOneName);
+        playerSelectionPage.setPlayerTwo(playerTwoName);
+        let connectFourPage = playerSelectionPage.startGame();
+        connectFourPage.dropPieceInColumn(4);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(4);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(4);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(4);
+        connectFourPage.getVictoryMessage().contains(`${playerOneName} wins!!`)
+    });
+
+    it('should display column full', ()=> {
+        let playerSelectionPage = navbarPage.goToConnectFour();
+        playerSelectionPage.setPlayerOne(playerOneName);
+        playerSelectionPage.setPlayerTwo(playerTwoName);
+        let connectFourPage = playerSelectionPage.startGame();
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.getColumnWarning().should('not.be.visible');
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.getColumnWarning().should('be.visible');
+    });
+
+    it('should keep the same color for board and pieces', ()=> {
+        cy.viewport('macbook-15');
+        let playerSelectionPage = navbarPage.goToConnectFour();
+        playerSelectionPage.setPlayerOne(playerOneName);
+        playerSelectionPage.setPlayerTwo(playerTwoName);
+        let connectFourPage = playerSelectionPage.startGame();
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(4);
+        connectFourPage.dropPieceInColumn(5);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(5);
+        connectFourPage.getGameBoard().matchImageSnapshot();
+    });
+
+    it('should keep a record of victories', ()=> {
+        let playerSelectionPage = navbarPage.goToConnectFour();
+        playerSelectionPage.setPlayerOne(playerOneName);
+        playerSelectionPage.setPlayerTwo(playerTwoName);
+        let connectFourPage = playerSelectionPage.startGame();
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(4);
+        connectFourPage.dropPieceInColumn(4);
+        connectFourPage.dropPieceInColumn(5);
+        connectFourPage.dropPieceInColumn(5);
+        connectFourPage.dropPieceInColumn(6);
+        connectFourPage.getRecord().contains(`${playerOneName} vs ${playerTwoName}: 1-0-0`);
+        connectFourPage.startNewGame();
+        connectFourPage.dropPieceInColumn(1);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(3);
+        connectFourPage.dropPieceInColumn(4);
+        connectFourPage.dropPieceInColumn(4);
+        connectFourPage.dropPieceInColumn(5);
+        connectFourPage.dropPieceInColumn(5);
+        connectFourPage.dropPieceInColumn(6);
+        connectFourPage.getRecord().contains(`${playerOneName} vs ${playerTwoName}: 1-1-0`);
+    });
 });
