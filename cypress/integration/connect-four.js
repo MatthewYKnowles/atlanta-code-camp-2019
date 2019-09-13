@@ -10,7 +10,7 @@ describe("Connect Four", ()=> {
         let now = Date.now();
         playerOneName = `p1-${now}`;
         playerTwoName = `p2-${now}`;
-        cy.visit("localhost:4200");
+        cy.visit("/");
     });
 
     it('should display winning players name', ()=> {
@@ -45,7 +45,7 @@ describe("Connect Four", ()=> {
     });
 
     it('should keep the same color for board and pieces', ()=> {
-        cy.viewport('macbook-15');
+        cy.viewport(1280, 720);
         let playerSelectionPage = navbarPage.goToConnectFour();
         playerSelectionPage.setPlayerOne(playerOneName);
         playerSelectionPage.setPlayerTwo(playerTwoName);

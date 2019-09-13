@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "cypress": "cypress run",
-    "cypress:open": "cypress open"
+    "cypress": "cypress run --config baseUrl=http://localhost:4200",
+    "cypress:open": "cypress open --config baseUrl=http://localhost:4200",
+    "cypress:prod": "cypress open --config baseUrl=http://matthewyknowles.com"
   },
   "author": "",
   "license": "ISC",
