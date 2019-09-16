@@ -1,8 +1,8 @@
-import {PlayerSelectionPage} from "./playerSelection.page";
+import {ProjectsPage} from "./projectsPage";
 
 export class NavbarPage {
-    goToConnectFour() {
-        cy.get('.btn').click();
-        return new PlayerSelectionPage();
+    goToProjects() {
+        cy.contains('Projects').click();
+        return new ProjectsPage();
     }
 }

@@ -14,7 +14,8 @@ describe("Connect Four", ()=> {
     });
 
     it('should display winning players name', ()=> {
-        let playerSelectionPage = navbarPage.goToConnectFour();
+        let projectsPage = navbarPage.goToProjects();
+        let playerSelectionPage = projectsPage.goToConnectFour();
         playerSelectionPage.setPlayerOne(playerOneName);
         playerSelectionPage.setPlayerTwo(playerTwoName);
         let connectFourPage = playerSelectionPage.startGame();
@@ -29,7 +30,8 @@ describe("Connect Four", ()=> {
     });
 
     it('should display column full', ()=> {
-        let playerSelectionPage = navbarPage.goToConnectFour();
+        let projectsPage = navbarPage.goToProjects();
+        let playerSelectionPage = projectsPage.goToConnectFour();
         playerSelectionPage.setPlayerOne(playerOneName);
         playerSelectionPage.setPlayerTwo(playerTwoName);
         let connectFourPage = playerSelectionPage.startGame();
@@ -46,7 +48,8 @@ describe("Connect Four", ()=> {
 
     it('should keep the same color for board and pieces', ()=> {
         cy.viewport(1280, 720);
-        let playerSelectionPage = navbarPage.goToConnectFour();
+        let projectsPage = navbarPage.goToProjects();
+        let playerSelectionPage = projectsPage.goToConnectFour();
         playerSelectionPage.setPlayerOne(playerOneName);
         playerSelectionPage.setPlayerTwo(playerTwoName);
         let connectFourPage = playerSelectionPage.startGame();
@@ -60,7 +63,8 @@ describe("Connect Four", ()=> {
     });
 
     it('should keep a record of victories', ()=> {
-        let playerSelectionPage = navbarPage.goToConnectFour();
+        let projectsPage = navbarPage.goToProjects();
+        let playerSelectionPage = projectsPage.goToConnectFour();
         playerSelectionPage.setPlayerOne(playerOneName);
         playerSelectionPage.setPlayerTwo(playerTwoName);
         let connectFourPage = playerSelectionPage.startGame();
